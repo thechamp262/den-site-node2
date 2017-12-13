@@ -1,4 +1,6 @@
-
+.row{
+  margin-bottom: 0;
+}
 #admin-side-panel{
   height: 100vh;
   width: 20%;
