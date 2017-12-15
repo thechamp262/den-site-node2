@@ -9,11 +9,10 @@ jQuery('document').ready(function(){
    let inputButton = jQuery('#poem-submit-button');//
    let form = jQuery('#new-poem-form');
 
-  jQuery('#table-body-poems').empty();
-
+   let tableId = jQuery('#table-body-poems');
+   let c = 0;
    socket.on('poemsLoad',function(poem){
-     console.log("This is the ID: ", poem._id);
-
+        c++;
        let tr =jQuery(`
          <tr>
          <th><div class="admin-main-section-table-body-divs"><p>${poem.name}</p></div></th>
@@ -24,20 +23,42 @@ jQuery('document').ready(function(){
          </tr>`);
          jQuery('#table-body-poems').append(tr);
 
+
+        if(c === poem.length){
+          jQuery('#admin-poems-table').after('<div id="table-container"></div>');
+          let VisibleRow = 6;
+          let totalRows = jQuery('#admin-poems-table tbody tr').length;
+          let pageAmount = totalRows/VisibleRow;
+          console.log('This is the amount of rows: ', totalRows);
+          for(i=0;i<pageAmount;i++){
+            let pageNum = i + 1;
+            jQuery('#table-container').append(`<a class="page-nav-sel" style="
+            padding:2px" href="#" rel=${i}>${pageNum}</a>`);
+          };
+          jQuery('#admin-poems-table tbody tr').hide();
+          jQuery('#admin-poems-table tbody tr').slice(0,VisibleRow).show();
+          jQuery('#table-container a:first').addClass('active');
+          jQuery('#table-container a').bind('click',function(){
+            jQuery('#table-container a').removeClass('active');
+            jQuery(this).addClass('active');
+            let currentPage = jQuery(this).attr('rel');
+            let startItem = currentPage * VisibleRow;
+            let endItem = startItem + VisibleRow;
+            $('#admin-poems-table tbody tr').css('opacity','0.0').hide().slice(startItem,endItem).css('display','table-row').animate({opacity:1},300);
+          })
+        }
    });
 
    jQuery('#table-body-poems').on('click','button.enter-edit-poem',function(){
      socket.emit('IncomingForEditPoem',{
        _id:jQuery(this).attr('id')
      },function(poem){
-       console.log(poem);
      })
    });
 
 
    socket.on('editPoem',function(poem){
      jQuery('#edit-poem-form').empty();
-     console.log(poem);
      let check;
      if(poem.active){
        check = 'checked="checked"'
@@ -62,7 +83,6 @@ jQuery('document').ready(function(){
      let option = jQuery(`<option id="${cat._id}">${cat.name}</option>`);
      jQuery('#poem-cat-sel').append(option);
      jQuery('select').material_select();
-     console.log('This is the length:',jQuery('tbody tr').length);
    })
 
    form.on('submit',function(e){

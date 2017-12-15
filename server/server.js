@@ -37,7 +37,8 @@ io.on('connection',(socket)=>{
         categories:poems[i].categories,
         poem: poems[i].poem,
         active: poems[i].active,
-        _id:poems[i]._id
+        _id:poems[i]._id,
+        length: poems.length
       })
     }
   })
