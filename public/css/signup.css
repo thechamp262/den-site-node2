@@ -1,0 +1,20 @@
+body{
+  background-color: teal;
+  clear:both;
+}
+#signup-form{
+  width: 25%;
+  height: auto;
+  margin: 0 auto;
+  padding: 10px;
+  box-shadow: 3px 3px 10px #000;
+  -moz-box-shadow: 3px 3px 10px #000;
+  background-color: #fff;
+  margin-top: 15%;
+}
+#signup-form p{
+  text-align: center;
+  font-size: 18px;
+  color: red;
+  font-weight: 400;
+}

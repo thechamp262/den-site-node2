@@ -6,8 +6,9 @@ const express = require('express');
 const socketIO = require('socket.io');
 const {mongoose} = require('./db/mongoose');
 
-const {Poems} = require('./models/poem.js');
+const {Poems} = require('./models/poem');
 const {Categories} = require('./models/categories');
+const {Users} = require('./models/users');
 
 const publicPath = path.join(__dirname,'../public');
 const port = process.env.PORT;
@@ -79,10 +80,36 @@ io.on('connection',(socket)=>{
     })
   })
 
+  socket.on('incomingSignUp',(user)=>{
+    Users.saveUser(user.email,user.password).then((user)=>{
+      console.log("This is the user",user);
+    },(e)=>{
+      console.log(e);
+    })
+  })
+
+  socket.on('emailExistCheck',(email,callback)=>{
+    console.log('email check area!!',email);
+    Users.checkEmail(email.email).then((emails)=>{
+      console.log('This is the emails ', emails);
+      callback(emails);
+    }).catch((e)=>{
+      callback(e);
+    })
+  })
 });
 
+
 app.get('/',(req,res)=>{
-  res.render('admin.hbs');
+  res.render('admin.hbs',{
+    cssStyle: "/css/admin.css"
+  });
+})
+
+app.get('/signup',(req,res)=>{
+  res.render('signup.hbs',{
+    cssStyle: `/css/signup.css`
+  });
 })
 
 app.get('/login',(req,res)=>{

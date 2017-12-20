@@ -12,6 +12,7 @@ jQuery('document').ready(function(){
    let tableId = jQuery('#table-body-poems');
    let c = 0;
    socket.on('poemsLoad',function(poem){
+     if(poem.length !== jQuery('#admin-poems-table tbody tr').length){
         c++;
        let tr =jQuery(`
          <tr>
@@ -40,13 +41,14 @@ jQuery('document').ready(function(){
           jQuery('#table-container a:first').addClass('active');
           jQuery('#table-container a').bind('click',function(){
             jQuery('#table-container a').removeClass('active');
-            jQuery(this).addClass('active');
+            jQuery(this).addClass('active'); 
             let currentPage = jQuery(this).attr('rel');
             let startItem = currentPage * VisibleRow;
             let endItem = startItem + VisibleRow;
             $('#admin-poems-table tbody tr').css('opacity','0.0').hide().slice(startItem,endItem).css('display','table-row').animate({opacity:1},300);
           })
         }
+      }//ends if statment checking poem.length and tr.lenght
    });
 
    jQuery('#table-body-poems').on('click','button.enter-edit-poem',function(){

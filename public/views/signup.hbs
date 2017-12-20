@@ -1,0 +1,23 @@
+{{>header}}
+
+<div id="container">
+
+
+
+  <form id="signup-form">
+
+    <input type="email" name="email-input" placeholder="john_doe@email.com"/>
+    <input type="password" name="password-input" placeholder="password1"/>
+    <button id="signup-submit-button" class="btn waves-effect waves-light">Sign-up</button>
+    <p hidden></p>
+    <!-- <p id="login-link"><a href="#">Login</a></p> -->
+  </form>
+
+</div>
+
+<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+<script type="text/javascript" src="/js/libs/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/js/signup.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+
+{{>footer}}
