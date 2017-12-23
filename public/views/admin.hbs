@@ -46,7 +46,7 @@
         </table>
       </div>
       <div class="admin-main-section__section" id="admin-main-section-add-poem">
-        <form id="new-poem-form">
+        <form id="new-poem-form" method="POST" action="/upload" enctype="multipart/form-data">
             <input name="title" autofocus type="text" placeholder="Title"/>
             <select id="poem-cat-sel" name='category-select'>
                 <option value="original-select" disabled selected>Select Your Category</option>
@@ -56,16 +56,16 @@
                 <label for="test5">Make Active</label>
               </p>
             <textarea id="textarea1" class="materialize-textarea" name="poem" placeholder="Poems"></textarea>
-            <!-- <div class="file-field input-field">
+            <div class="file-field input-field">
               <image scr="https://i.pinimg.com/736x/1b/50/54/1b505457e679070d28f28afc02489cc8--coyote-silhouette-howling-wolf-silhouette.jpg" id=""/>
               <div class="btn">
                 <span>Select Image</span>
-                <input name="image-upload" type="file" id="poem-image-siofu_input">
-              </div> -->
-              <!-- <div class="file-path-wrapper">
+                <input name="image-upload" type="file" id="poem-image-siofu_input"/>
+              </div>
+               <div class="file-path-wrapper">
                 <input class="file-path validate" type="text">
               </div>
-            </div>-->
+            </div>
             <button id="poem-submit-button" class="btn waves-effect waves-light" type="submit" name="action">Submit Poem<i class="material-icons right"></i></button>
         </form>
       </div>
@@ -80,6 +80,7 @@
 <script type="text/javascript" src="/js/libs/jquery-3.2.1.min.js"></script>
 <!-- Compiled and minified JavaScript -->
 <script src="/js/libs/mustache.js"></script>
+<script type='text/javascript' src='js/alertMessages.js'></script>
 <script type="text/javascript" src="/js/admin.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
 {{> footer}}

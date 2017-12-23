@@ -80,18 +80,18 @@ UserSchema.statics.findByToken = function(token){
 }
 
 UserSchema.statics.saveUser = (email,password)=>{
+  let user = new Users({
+    email,
+    password
+  });
   return new Promise((resolve,reject)=>{
-    let user = new Users({
-      email,
-      password
-    })
     user.save().then((users)=>{
-      if(!uses){
-        return Promise.reject();
+      if(!users){
+        return reject();
       }
       return resolve(users);
     }).catch((e)=>{
-      return Promise.reject();
+      return reject();
     })
   })
 }

@@ -2,6 +2,8 @@ jQuery('document').ready(function(){
 
    let socket = io();
 
+   //messageHandeler([0,'hello world',jQuery('#table-body-poems')],true);
+
   console.log("Boom!!");
 
   //Function call for the materialize css framework
@@ -41,7 +43,7 @@ jQuery('document').ready(function(){
           jQuery('#table-container a:first').addClass('active');
           jQuery('#table-container a').bind('click',function(){
             jQuery('#table-container a').removeClass('active');
-            jQuery(this).addClass('active'); 
+            jQuery(this).addClass('active');
             let currentPage = jQuery(this).attr('rel');
             let startItem = currentPage * VisibleRow;
             let endItem = startItem + VisibleRow;
@@ -62,14 +64,18 @@ jQuery('document').ready(function(){
    socket.on('editPoem',function(poem){
      jQuery('#edit-poem-form').empty();
      let check;
+     let checkText;
      if(poem.active){
-       check = 'checked="checked"'
+       check = 'checked="checked"';
+       checkText = 'Make Inactive';
      }else{
        check = '';
+       checkText = 'Make Active';
      }
      let formInput = `<input autofocus type="text" value="${poem.name}"/><p>
-       <input name="is-active"${check}  type="checkbox" id="test5" /><label for="test5">Make Active</label></p>
+       <input name="is-active"${check}  type="checkbox" id="test5" /><label for="test5">${checkText}</label></p>
        <textarea id="textarea1" class="materialize-textarea" name="poem">${poem.poem}</textarea>
+       <img class="responsive-img" src='/images/poem-images/${poem.image}'/>
        <button id="${poem._id}" class="btn waves-effect waves-light" type="submit" name="action">Submit Edit<i class="material-icons right"></i></button>`
        jQuery('#edit-poem-form').append(formInput);
        jQuery('#edit-popup').css('display','block');
@@ -88,17 +94,20 @@ jQuery('document').ready(function(){
    })
 
    form.on('submit',function(e){
-     e.preventDefault();
+     //e.preventDefault();
+    console.log('This is this @@this:: ',jQuery('[name=image-upload]'));
      inputButton.attr('disabled','disabled').text('Submitting Poem...');
      let title = jQuery('[name=title]'),
         poem = jQuery('[name=poem]'),
         cat = jQuery('[name=category-select]'),
+        image = jQuery('[name=image-upload]')[0].files[0].name;
         active = jQuery('[name=is-active]');
     socket.emit('newPoemIncoming',{
       title: title.val(),
       poem: poem.val(),
       cat: jQuery(`#${cat.attr('id')} option:selected`).attr('id'),
-      active: active.is(':checked')
+      active: active.is(':checked'),
+      image
     },function(){
       inputButton.removeAttr('disabled').text('Submit Poem');
       title.val('');

@@ -35,6 +35,10 @@ let  PoemSchema = new mongoose.Schema({
   active:{
     type: Boolean,
     required: true
+  },
+  image:{
+    type: String,
+    required:true
   }
 })
 
@@ -48,7 +52,7 @@ PoemSchema.methods.toJSON = ()=>{
 PoemSchema.statics.grabAll = ()=>{
 
   return new Promise((resolve,reject)=>{
-    Poems.find().then((poems)=>{
+    Poems.find().sort('-createdAt').then((poems)=>{
       if(!poems){
         return Promise.reject();
       }
@@ -90,15 +94,33 @@ PoemSchema.statics.grabByCat = (sectionId)=>{
   })
 }
 
-PoemSchema.statics.saveNewPoem = (name,poem,categories,active)=>{
-  console.log('I am at the saveNewPoem section');
+PoemSchema.statics.editPoem = (_id,name,poem,categories,active)=>{
+  Poems.findOneAndUpdate({
+    _id
+  },{$set: {
+    name,
+    poem,
+    categories,
+    active
+  }}).then((poem)=>{
+    if(!poem){
+
+    }
+  }).catch((e)=>{
+
+  })
+}
+
+PoemSchema.statics.saveNewPoem = (name,poem,categories,active,image)=>{
+
   let poems = new Poems({
     name,
     poem,
     categories,
     author: 1,
     createdAt: new Date().getTime(),
-    active
+    active,
+    image
   });
   return new Promise((resolve,reject)=>{
     poems.save().then((poem)=>{

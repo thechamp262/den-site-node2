@@ -5,6 +5,8 @@ const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
 const {mongoose} = require('./db/mongoose');
+const multer = require('multer');
+
 
 const {Poems} = require('./models/poem');
 const {Categories} = require('./models/categories');
@@ -29,6 +31,19 @@ app.use(express.static(publicPath));
 app.set('views', publicPath + '/views');
 app.set('view engine','hbs');
 
+const storage = multer.diskStorage({
+  destination: './public/images/poem-images',
+  filename: (req,file,callback)=>{
+    callback(null,file.originalname);
+  }
+})
+
+//Init Upload
+const upload = multer({
+  storage
+}).single('image-upload');
+
+
 io.on('connection',(socket)=>{
 
   Poems.grabAll().then((poems)=>{
@@ -39,7 +54,8 @@ io.on('connection',(socket)=>{
         poem: poems[i].poem,
         active: poems[i].active,
         _id:poems[i]._id,
-        length: poems.length
+        length: poems.length,
+        image: poems[i].image
       })
     }
   })
@@ -57,14 +73,15 @@ io.on('connection',(socket)=>{
 
 
   socket.on('newPoemIncoming',(poem,callback)=>{
-    Poems.saveNewPoem(poem.title,poem.poem,poem.cat,poem.active).then((poem)=>{
+    Poems.saveNewPoem(poem.title,poem.poem,poem.cat,poem.active,poem.image).then((poem)=>{
       console.log('This is the saved poem: ',poem);
       socket.emit('poemsLoad',{
         name:poem.name,
         categories:poem.categories,
         poem: poem.poem,
         active: poem.active,
-        _id:poem._id
+        _id:poem._id,
+        image:poem.image
       })
     });
     callback();
@@ -75,23 +92,23 @@ io.on('connection',(socket)=>{
         name: poem.name,
         _id: poem._id,
         poem: poem.poem,
-        active: poem.active
+        active: poem.active,
+        image: poem.image
       })
     })
   })
 
-  socket.on('incomingSignUp',(user)=>{
+  socket.on('incomingSignUp',(user,callback)=>{
     Users.saveUser(user.email,user.password).then((user)=>{
       console.log("This is the user",user);
-    },(e)=>{
+      callback();
+    }).catch((e)=>{
       console.log(e);
     })
   })
 
   socket.on('emailExistCheck',(email,callback)=>{
-    console.log('email check area!!',email);
     Users.checkEmail(email.email).then((emails)=>{
-      console.log('This is the emails ', emails);
       callback(emails);
     }).catch((e)=>{
       callback(e);
@@ -116,6 +133,18 @@ app.get('/login',(req,res)=>{
   res.render('login.hbs',{
     title: 'login',
     css: '#'
+  })
+})
+
+app.post('/upload',(req,res)=>{
+  upload(req,res,(e)=>{
+    if(e){
+      console.log(e);
+    }else{
+      res.render('admin.hbs',{
+        cssStyle: "/css/admin.css"
+      });
+    }
   })
 })
 
