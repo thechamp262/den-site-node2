@@ -68,13 +68,27 @@ PoemSchema.statics.grabOneById = (_id)=>{
     Poems.findOne({
       _id
     }).then((poem)=>{
-      console.log("Here Here", poem);
       if(!poem){
         return Promise.reject();
       }
       return resolve(poem);
     }).catch((e)=>{
       return Promise.reject();
+    })
+  })
+}
+
+PoemSchema.statics.grabOneByName = (name)=>{
+  return new Promise((resolve,reject)=>{
+    Poems.findOne({
+      name
+    }).then((poem)=>{
+      if(poem === null){
+        return resolve(true);
+      }
+        return resolve(false);
+    }).catch((e)=>{
+      return reject(e);
     })
   })
 }
@@ -108,6 +122,22 @@ PoemSchema.statics.editPoem = (_id,name,poem,categories,active)=>{
     }
   }).catch((e)=>{
 
+  })
+}
+
+PoemSchema.statics.imageExistCheck = (image)=>{
+  return new Promise((resolve,reject)=>{
+    Poems.findOne({
+      image: image.name
+    }).then((images)=>{
+      console.log('This is the answer form the image that I checked: ', images);
+      if(images === null){
+        return resolve(true);
+      }
+      return resolve(false);
+    }).catch((e)=>{
+      return reject();
+    })
   })
 }
 

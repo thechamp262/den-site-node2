@@ -32,7 +32,7 @@ jQuery('document').ready(function(){
           let VisibleRow = 6;
           let totalRows = jQuery('#admin-poems-table tbody tr').length;
           let pageAmount = totalRows/VisibleRow;
-          console.log('This is the amount of rows: ', totalRows);
+
           for(i=0;i<pageAmount;i++){
             let pageNum = i + 1;
             jQuery('#table-container').append(`<a class="page-nav-sel" style="
@@ -94,27 +94,27 @@ jQuery('document').ready(function(){
    })
 
    form.on('submit',function(e){
-     //e.preventDefault();
-    console.log('This is this @@this:: ',jQuery('[name=image-upload]'));
-     inputButton.attr('disabled','disabled').text('Submitting Poem...');
-     let title = jQuery('[name=title]'),
-        poem = jQuery('[name=poem]'),
-        cat = jQuery('[name=category-select]'),
-        image = jQuery('[name=image-upload]')[0].files[0].name;
-        active = jQuery('[name=is-active]');
-    socket.emit('newPoemIncoming',{
-      title: title.val(),
-      poem: poem.val(),
-      cat: jQuery(`#${cat.attr('id')} option:selected`).attr('id'),
-      active: active.is(':checked'),
-      image
-    },function(){
-      inputButton.removeAttr('disabled').text('Submit Poem');
-      title.val('');
-      poem.val('');
-      cat.val('original-select');
-      active.prop('checked',false);
-    })
+     e.preventDefault();
+        formHandler('poemSubmitForm',[{
+          title:{
+            value: jQuery('[name=title]').val()
+          },
+          category:{
+            value: jQuery(`#${jQuery('[name=category-select]').attr('id')} option:selected`).attr('id')
+          },
+          image:{
+            image: jQuery('[name=image-upload]')[0].files[0]
+          },
+          poem:{
+            value: jQuery('[name=poem]').val()
+          },
+          button:{
+            locations: inputButton
+          },
+          active:{
+            active: jQuery('[name=is-active]').is(':checked')
+          }
+        }],jQuery('#poem-sumit-messages'));
    })
 
   jQuery('#admin-side-section-buttons nav ul li').click(function(ele){

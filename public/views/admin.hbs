@@ -57,7 +57,7 @@
               </p>
             <textarea id="textarea1" class="materialize-textarea" name="poem" placeholder="Poems"></textarea>
             <div class="file-field input-field">
-              <image scr="https://i.pinimg.com/736x/1b/50/54/1b505457e679070d28f28afc02489cc8--coyote-silhouette-howling-wolf-silhouette.jpg" id=""/>
+              <img scr="https://i.pinimg.com/736x/1b/50/54/1b505457e679070d28f28afc02489cc8--coyote-silhouette-howling-wolf-silhouette.jpg" id=""/>
               <div class="btn">
                 <span>Select Image</span>
                 <input name="image-upload" type="file" id="poem-image-siofu_input"/>
@@ -67,6 +67,7 @@
               </div>
             </div>
             <button id="poem-submit-button" class="btn waves-effect waves-light" type="submit" name="action">Submit Poem<i class="material-icons right"></i></button>
+            <p id='poem-sumit-messages'>Hello World!</p>
         </form>
       </div>
       <div class="admin-main-section__section" id="admin-main-section-messages">
@@ -81,6 +82,8 @@
 <!-- Compiled and minified JavaScript -->
 <script src="/js/libs/mustache.js"></script>
 <script type='text/javascript' src='js/alertMessages.js'></script>
+<script type='text/javascript' src='js/formValidation.js'></script>
+<script type='text/javascript' src='js/formHandler.js'></script>
 <script type="text/javascript" src="/js/admin.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
 {{> footer}}

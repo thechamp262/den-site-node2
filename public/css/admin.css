@@ -25,6 +25,12 @@
 #poem-submit-button{
   margin-top: 30px;
 }
+#poem-sumit-messages{
+  text-align: center;
+  font-size: 18px;
+  color: red;
+  font-weight: 400;
+}
 #admin-side-section-buttons nav ul li{
   width: 100%;
   height: 60px;

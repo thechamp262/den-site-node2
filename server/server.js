@@ -71,10 +71,14 @@ io.on('connection',(socket)=>{
     }
   });
 
+  socket.on('checkTitle',(title,callback)=>{
+    Poems.grabOneByName(title.title).then((poem)=>{
+      callback(poem);
+    })
+  });
 
   socket.on('newPoemIncoming',(poem,callback)=>{
     Poems.saveNewPoem(poem.title,poem.poem,poem.cat,poem.active,poem.image).then((poem)=>{
-      console.log('This is the saved poem: ',poem);
       socket.emit('poemsLoad',{
         name:poem.name,
         categories:poem.categories,
@@ -96,11 +100,10 @@ io.on('connection',(socket)=>{
         image: poem.image
       })
     })
-  })
+  });
 
   socket.on('incomingSignUp',(user,callback)=>{
     Users.saveUser(user.email,user.password).then((user)=>{
-      console.log("This is the user",user);
       callback();
     }).catch((e)=>{
       console.log(e);
@@ -112,6 +115,14 @@ io.on('connection',(socket)=>{
       callback(emails);
     }).catch((e)=>{
       callback(e);
+    })
+  })
+
+  socket.on('imageNameCheck',(image,callback)=>{
+    Poems.imageExistCheck(image).then((images)=>{
+      callback(images);
+    }).catch((e)=>{
+
     })
   })
 });
